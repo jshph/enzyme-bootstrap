@@ -1,0 +1,5 @@
+.env
+.sync-state
+email-cache.db
+.enzyme/
+.obsidian/
