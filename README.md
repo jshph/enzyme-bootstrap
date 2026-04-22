@@ -1,49 +1,50 @@
 # enzyme-bootstrap
 
-Template Obsidian vault that syncs your Gmail and meeting notes into wikilinked markdown, then makes it all searchable with [Enzyme](https://github.com/jshph/enzyme-cli).
+Your email and meeting notes, wikilinked and searchable by concept. Clone, run `/setup`, done.
 
-Your email threads, Granola transcripts, and people notes become a connected knowledge graph — searchable by concept, not just keyword.
+## Why this exists
 
-## What you get
+Most of what you know about the people you work with lives in email threads and call transcripts. But email is a black hole — you can search by keyword, not by concept. You can't ask "what's my history with Sarah" or "who introduced me to Marco" and get a real answer.
 
-```
-your-vault/
-├── emails/          # one file per thread, newest first
-│   ├── 2026-03-28 API refactor timeline.md
-│   ├── 2026-04-05 demo follow-up.md
-│   └── ...
-├── people/          # one note per person, cross-linked
-│   ├── Sarah Chen.md
-│   ├── Marco Reyes.md
-│   └── ...
-├── transcripts/     # meeting notes + raw transcript
-│   ├── 2026-04-05 demo for Marco.md
-│   └── ...
-├── CLAUDE.md        # tells Claude how to work with the vault
-└── .claude/
-    └── commands/
-        └── setup.md # /setup skill — connects your email and meetings
-```
+This vault fixes that. It syncs your Gmail threads and Granola meeting notes into Obsidian as wikilinked markdown, then indexes everything with [Enzyme](https://github.com/jshph/enzyme-cli) for semantic search. People, conversations, and ideas become a connected graph you can actually think with.
 
 ## Quick start
 
-1. Clone this repo into your Obsidian vaults directory
-2. Open it in Claude Code
-3. Run `/setup`
+```bash
+git clone https://github.com/jshph/enzyme-bootstrap.git
+cd enzyme-bootstrap
+claude          # open Claude Code
+/setup          # connect your email and meetings
+```
 
-That's it. `/setup` walks you through everything:
+`/setup` detects what's on your machine, installs what's missing, and walks you through everything interactively. The only manual step is creating a Gmail app password (30 seconds, no Google Cloud project). No dev experience required.
 
-- **Gmail** — creates a Gmail app password (no Google Cloud project needed), writes a Python sync script using only standard library modules, sets up a cron
-- **Granola** — installs granola-cli, writes a transcript sync script, adds to the same cron
-- **Enzyme** — installs and indexes the vault for semantic search
+## What it does
 
-No dev experience required. The only manual step is creating a Gmail app password, which takes 30 seconds.
+**Sync** — Gmail threads and Granola transcripts sync to markdown every 6 hours via cron. Only threads where you replied get synced (filters out newsletters and notifications).
 
-## What the sync produces
+**Link** — People are wikilinked across emails, transcripts, and people notes. `[[Sarah Chen]]` in an email thread connects to her people note and every other conversation she appears in.
+
+**Search** — Enzyme indexes the full vault for semantic search. Ask "fundraising timeline" and it finds relevant threads, transcripts, and people notes even if those exact words don't appear.
+
+## What the vault looks like
+
+```
+emails/                                     # one file per thread
+├── 2026-03-28 API refactor timeline.md
+├── 2026-04-05 demo follow-up.md
+├── 2026-04-08 newsletter draft review.md
+
+people/                                     # one note per person
+├── Sarah Chen.md
+├── Marco Reyes.md
+
+transcripts/                                # Granola meeting exports
+├── 2026-04-05 demo for Marco.md
+├── 2026-03-28 call with Sarah about API refactor.md
+```
 
 ### Email threads
-
-Only threads where you replied get synced. One file per thread, all participants listed:
 
 ```markdown
 ---
@@ -58,6 +59,8 @@ people:
 
 Hey — quick update on the API refactor. We ended up going
 with the gateway pattern instead of the mesh approach.
+Fewer moving parts, and Marco mentioned Foundry's portfolio
+companies have had better luck with gateways at our scale.
 
 ----
 
@@ -68,15 +71,14 @@ window look like?
 
 ----
 
-**[[Sarah Chen]]** [[2026-03-29]]
+**[[Priya Kapoor]]** [[2026-04-01]]
 
-End of April, assuming we freeze feature work during the
-migration window.
+Sarah — jumping in here. First pass on the developer portal
+wireframes is done. Main insight: people don't want a
+dashboard, they want a feed.
 ```
 
 ### Meeting transcripts
-
-Granola-style: AI notes up top, raw transcript below.
 
 ```markdown
 ---
@@ -92,7 +94,7 @@ Recorded Apr 5, 2026
 ## Notes
 
 ### Key takeaways
-- The connection-surfacing without manual tagging is the differentiator
+- Connection-surfacing without manual tagging is the differentiator
 - Onboarding needs work — "catalyze" means nothing to new users
 
 ---
@@ -101,22 +103,33 @@ Recorded Apr 5, 2026
 
 Me: Let me start with the vault exploration...
 
-Marco Reyes: This is way stronger than last time.
+Marco Reyes: This is way stronger than last time. The way it
+surfaces connections without requiring manual tagging — that's
+the thing that'll sell.
 ```
 
-## Searching the vault
-
-Once Enzyme is set up:
+## Searching
 
 ```bash
-enzyme petri                              # what's in here, who matters
-enzyme catalyze "fundraising timeline"    # conceptual search
-enzyme catalyze "design collaboration"    # finds related threads + transcripts
+enzyme petri                              # who matters, what themes are trending
+enzyme catalyze "fundraising timeline"    # conceptual search across everything
+enzyme catalyze "design collaboration"    # finds threads + transcripts + people
 ```
+
+## How it works
+
+The setup is three pieces:
+
+1. **Gmail → markdown** — A Python script (stdlib only, no pip installs) connects to Gmail via IMAP with an app password, groups messages by thread, and writes one markdown file per thread. Runs on a cron every 6 hours.
+
+2. **Granola → markdown** — A script pulls meeting data via granola-cli, extracts AI notes and raw transcript, writes one file per meeting with participants in frontmatter. Same cron.
+
+3. **Enzyme** — Indexes the vault's wikilink graph and content for semantic search. Re-indexes on every sync.
 
 ## Privacy
 
-- Everything runs locally. No cloud services, no intermediaries.
-- Gmail connects via IMAP over SSL (same as your phone).
-- App password is stored in `.env` (gitignored) and can be revoked anytime.
-- The app password only grants IMAP read access — it can't change account settings or access other Google services.
+Everything runs locally on your machine. No cloud services, no intermediaries.
+
+- Gmail connects via IMAP over SSL (same protocol as your phone)
+- App password is stored in `.env` (gitignored) — revoke it anytime at [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
+- App passwords only grant IMAP read access — they can't change account settings or access other Google services
