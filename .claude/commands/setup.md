@@ -227,12 +227,11 @@ Me: What I said.
 
 ### Install
 
-If brew is available:
 ```bash
-brew install jshph/enzyme/enzyme-cli
+curl -fsSL enzyme.garden/install.sh | bash
 ```
 
-If not, check https://github.com/jshph/enzyme-cli for current install options.
+This downloads the binary, the embedding model, and auto-installs the Claude Code plugin. No brew, npm, or pip needed.
 
 ### Initialize
 
