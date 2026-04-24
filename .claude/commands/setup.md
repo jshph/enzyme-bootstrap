@@ -86,6 +86,7 @@ The script should:
 
 ```markdown
 ---
+created: 2026-03-28
 people:
   - "[[Person A]]"
   - "[[Person B]]"
@@ -115,6 +116,7 @@ Next message in the thread.
 ```
 
 **Format rules:**
+- `created:` frontmatter is the date of the first message in the thread (ISO format, no wikilink)
 - `people:` frontmatter lists everyone in the thread (except the user) as `"[[Name]]"` wikilinks
 - Messages within a thread in chronological order (oldest first)
 - `----` separates messages
