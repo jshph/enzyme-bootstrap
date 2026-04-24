@@ -15,7 +15,7 @@ cp enzyme-bootstrap/CLAUDE.md your-vault/
 
 # install enzyme
 curl -fsSL enzyme.garden/install.sh | bash
-cd your-vault && enzyme init && enzyme refresh
+cd your-vault && enzyme init
 
 # ask
 claude
