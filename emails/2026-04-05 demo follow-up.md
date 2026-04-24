@@ -1,5 +1,5 @@
 ---
-created: 2026-04-05
+created: "[[2026-04-05]]"
 people:
   - "[[Marco Reyes]]"
   - "[[Priya Kapoor]]"

@@ -1,5 +1,5 @@
 ---
-created: 2025-11-15
+created: "[[2025-11-15]]"
 people:
   - "[[Sarah Chen]]"
   - "[[Marco Reyes]]"

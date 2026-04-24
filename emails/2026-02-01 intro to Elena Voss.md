@@ -1,5 +1,5 @@
 ---
-created: 2026-02-01
+created: "[[2026-02-01]]"
 people:
   - "[[Marco Reyes]]"
   - "[[Elena Voss]]"

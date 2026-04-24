@@ -60,17 +60,17 @@ The goal is structured backlinks without manual tagging. The user's existing fol
 
 ## Retrieval patterns
 
-**Questions about a specific person** ("what's my history with Sarah?") — the person's name is a concrete anchor, so start with grep:
+**Questions about a specific person** ("what's my history with Sarah?") — the name is a concrete anchor, so start with grep:
 
-1. Read `people/<Name>.md` for role and context
-2. Grep for their name across `emails/` and `transcripts/` (search without brackets to catch both frontmatter `"[[Name]]"` and body `[[Name]]`)
-3. Follow wikilinks — if a thread mentions `[[Sarah Chen]]` and `[[Marco Reyes]]`, check both people notes
+1. Check `people/` for their note (role, context, connections)
+2. Grep for their name across the vault (search without brackets to catch both frontmatter `"[[Name]]"` and body `[[Name]]`)
+3. Follow wikilinks from the results to related people and threads
 
 **Thematic questions involving a person** ("what has Elena said about knowledge neighborhoods?") — the theme is the hard part, so use catalyze for the concept and grep to filter by person.
 
-**Date-based cross-referencing** — dates are concrete anchors. Grep for `[[2026-03-28]]` to find all emails, transcripts, and daily notes from the same day.
+**Stale threads / follow-ups** ("what threads have gone quiet?") — grep for the user's threads, check the `created:` date or last message date, surface ones with no recent activity. Cross-reference with people notes to add context on why a follow-up might matter.
 
-**Threads are the atomic unit for email.** One thread involves multiple people; one person appears across many threads. Use `people:` frontmatter to find all threads involving a specific person.
+**Date-based cross-referencing** — dates are concrete anchors. Grep for a date to find notes, threads, or meetings from the same day.
 
 ## Vault formats (synced content)
 

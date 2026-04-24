@@ -18,17 +18,14 @@ Python 3 is the only hard requirement for email sync — it's pre-installed on e
 
 Node/npm is only needed if the user wants Granola transcript sync.
 
-## Step 1: Clear sample content
+## Step 1: Check for existing content
 
-This vault ships with sample data to show the format. Before syncing real content, remove the sample files:
+This vault ships with sample data (fictional people like "Sarah Chen", "Marco Reyes"). Before syncing real content, check whether the vault already has real data:
 
-```bash
-rm -f emails/*.md
-rm -f people/*.md
-rm -f transcripts/*.md
-```
-
-Tell the user: "I'm clearing the sample data so your real email and meetings can take its place. The folder structure and formats stay the same."
+1. Check if `emails/`, `people/`, or `transcripts/` contain files
+2. If files exist, read a couple to determine if they're sample data (fictional names from the template) or real user content
+3. If sample data: remove it silently — `rm -f emails/*.md people/*.md transcripts/*.md`
+4. If real content: **do not delete anything**. Tell the user: "You already have content in these folders — I'll sync alongside it without overwriting."
 
 ## Step 2: Gmail app password
 
@@ -86,7 +83,7 @@ The script should:
 
 ```markdown
 ---
-created: 2026-03-28
+created: "[[2026-03-28]]"
 people:
   - "[[Person A]]"
   - "[[Person B]]"
@@ -116,7 +113,7 @@ Next message in the thread.
 ```
 
 **Format rules:**
-- `created:` frontmatter is the date of the first message in the thread (ISO format, no wikilink)
+- `created:` frontmatter is the date of the first message in the thread as a `"[[yyyy-mm-dd]]"` wikilink
 - `people:` frontmatter lists everyone in the thread (except the user) as `"[[Name]]"` wikilinks
 - Messages within a thread in chronological order (oldest first)
 - `----` separates messages
@@ -192,6 +189,7 @@ Create `scripts/sync-transcripts.py` that:
 
 ```markdown
 ---
+created: "[[2026-03-28]]"
 people:
   - "[[Person A]]"
   - "[[Person B]]"

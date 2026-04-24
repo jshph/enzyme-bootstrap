@@ -1,5 +1,5 @@
 ---
-created: 2026-03-28
+created: "[[2026-03-28]]"
 people:
   - "[[Sarah Chen]]"
 date: "[[2026-03-28]]"
